@@ -1,0 +1,12 @@
+cytassist_id,patient_id,Response,treatment,state_pre,state_post,n_interface_pre,n_interface_post,transition
+cytassist_70,85557,Responder,List A,S0,S0,0,22,S0→S0
+cytassist_71,85558,Responder,List A,S3,S4,25,393,S3→S4
+cytassist_72,85559,Non_Responder,List A,S1,S1,37,400,S1→S1
+cytassist_73,85560,Non_Responder,List A,S3,S1,47,133,S3→S1
+cytassist_74,85561,Non_Responder,List A,S1,S1,26,305,S1→S1
+cytassist_76,85563,Responder,List B,S3,S0,46,7,S3→S0
+cytassist_79,85565,Non_Responder,List A,S?,S1,19,147,S?→S1
+cytassist_83,85566,Responder,List B,S?,S1,14,145,S?→S1
+cytassist_84,85567,Responder,List B,S2,S3,104,201,S2→S3
+cytassist_85,85568,Non_Responder,List B,S?,S1,1,186,S?→S1
+cytassist_86,85569,Non_Responder,List B,S?,S1,2,370,S?→S1
