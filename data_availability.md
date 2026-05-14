@@ -118,9 +118,10 @@ colorectal, glioblastoma, lung, ovarian, prostate), comprising 118,526
 spots. No immunotherapy response annotations. Used to test generality of
 the coexact operator framework.
 
-**Access:** Data sourced from the 10x Genomics Visium Spatial Gene
-Expression public datasets and the Human Cell Atlas spatial data portal.
-Individual section accession numbers are listed in
+**Access:** Data sourced from the 10x Genomics Visium Spatial Gene Expression public datasets, the Human Cell Atlas spatial data portal, and the Spatial Hallmarks pan-cancer spatial transcriptomics collection publicly archived at Zenodo:
+https://zenodo.org/records/14044964
+
+The cohort comprised 26 Visium sections across six cancer types. Individual section accession numbers and metadata are listed in:
 `results/spatial_hallmarks/spatial_hallmarks_metadata.csv`.
 
 **Programme scoring markers (pan-cancer):**
@@ -160,9 +161,9 @@ without re-running the full pipeline.
 ## Code Availability
 
 All analysis code is available at:
-**https://github.com/Anas-Enoch/operator-regime-hcc**
+**https://github.com/Anas-Enoch/tumor-immune-operator-geometry**
 
-MIT Licence. Please cite the manuscript if you use this code.
+Please cite the manuscript if you use this code.
 
 ---
 
