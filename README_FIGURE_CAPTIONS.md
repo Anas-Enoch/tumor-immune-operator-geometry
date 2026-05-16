@@ -1,14 +1,44 @@
 # Figure Captions — Operator-Regime HCC Manuscript
 
-Full legends for Figures 1–7 of:
+Full legends for Figures 1–8 of:
 
 > Locally constrained immune-interaction fronts at tumour–immune interfaces
 > identify operator-regime states associated with immunotherapy response in HCC
 > — Anas Enoch (2025)
 
+> **Numbering note:** Figure 1 (baseline benchmarking) was added to the final
+> manuscript version. The conceptual framework is now Figure 2, and all
+> subsequent figures are renumbered accordingly (previous Figure N → current
+> Figure N+1).
+
 ---
 
-## Figure 1 | Operator-regime framework for tumour–immune interface analysis
+## Figure 1 | Operator coexact metrics outperform simpler abundance and spatial baselines while retaining abundance-independent information
+
+**A** AUC comparison across eight metrics (section-level, 6R vs 9NR sections).
+Blue bars: abundance-based metrics (immune fraction, T-cell/tumour ratio, CD8
+density proxy) — all significant (p < 0.03) but below operator metrics.
+Green bars: spatial proximity metrics (Moran's I, Ripley's K LCC proxy) —
+directional or non-significant. Orange bars: operator-derived coexact metrics
+(interface-localised coexact energy AUC = 0.926; coexact fraction AUC = 0.907).
+Nearest-neighbour proximity: AUC = 0.500 (complete null). Significance
+symbols: `***` p < 0.01, `**` p < 0.05, `†` p < 0.10, `ns` not significant.
+
+**B** ROC curves for all eight metrics. The operator coexact fraction curve
+(orange, thick) achieves 83% TPR before any false positive; abundance metrics
+(blue, thin) require more false positives to reach comparable sensitivity.
+
+**C** Leave-one-out (LOO) out-of-fold AUC from logistic regression.
+Abundance only: AUC = 0.81. Spatial baselines: AUC = 0.52. Coexact fraction
+alone: AUC = 0.85. Abundance + coexact: AUC = 0.85 (no improvement over
+coexact alone). All features combined: AUC = 0.85.
+Coexact fraction retains significant predictive association after controlling
+for immune fraction (partial Spearman ρ = 0.535, p = 0.040), establishing that
+the operator signal overlaps with but is not reducible to immune abundance.
+
+---
+
+## Figure 2 | Operator-regime framework for tumour–immune interface analysis
 
 **A** Tumour–immune tissue architecture. The interface zone (dashed orange)
 separates the tumour core (red fill, irregular boundary) from the surrounding
@@ -45,7 +75,7 @@ one mechanistic question.
 
 ---
 
-## Figure 2 | Responder interfaces form connected coexact fronts
+## Figure 3 | Responder interfaces form connected coexact fronts
 
 **A** Representative responder section (HCC84_post, S3 state). Coexact
 density map with Gaussian KDE contour overlays (4 levels) computed from
@@ -76,7 +106,7 @@ interface-localised. Desaturated colours indicate secondary/negative result.
 
 ---
 
-## Figure 3 | Immune–immune algebra, not tumour–myeloid strength, discriminates response
+## Figure 4 | Immune–immune algebra, not tumour–myeloid strength, discriminates response
 
 **A** Commutator fraction matrix. Median fraction of total noncommutative
 energy for each programme pair (TM, IM, EM, IE), rows: responders (R) vs
@@ -99,11 +129,13 @@ across all six programme pairs. Higher entropy = more diverse programme
 interaction structure. Mann-Whitney p = 0.050. Patient 76_pre (complete
 responder) shows the highest cohort operator entropy (0.994).
 
-**E** Spatial immune programme mosaic (Voronoi tessellation). Left panel:
-responder interface — Voronoi cells are heterogeneously coloured red (T-cell)
-and blue (exhaustion), reflecting the spatial mosaic of functional states.
-Right panel: non-responder — cells are uniformly grey, reflecting
-homogeneous immune programme co-distribution.
+**E** Spatial immune programme mosaic (schematic). Left panel: responder
+interface — cells are heterogeneously coloured red (T-cell) and blue
+(exhaustion), reflecting the spatial programme opposition consistent with
+a T-cell functional mosaic. Right panel: non-responder — cells are uniformly
+grey, reflecting homogeneous immune programme co-distribution. This is a
+computational proxy representation, not a direct measurement of cellular
+functional state.
 
 **F** HCC5NR comparison (CABO/NIVO external cohort). Grouped bar chart
 comparing HCC5NR (grey) versus responder median (red) for five metrics: TM,
@@ -112,11 +144,13 @@ all immune–immune metrics despite high spatial organisation.
 
 ---
 
-## Figure 4 | KTS state transitions: all non-responders converge to S1
+## Figure 5 | KTS state transitions: all non-responders converge to S1
 
 **A** Operator-regime state definitions. Five discrete states with color
 coding (S0 grey, S1 blue, S2 green, S3 orange, S4 purple) and classification
 criteria (spatial score, P95 coexact density, Gini coefficient).
+State boundaries are discovery-cohort-derived and require external calibration
+before application to independent datasets.
 
 **B** Representative spatial maps. Inset panels showing coexact density maps
 for an S3 responder interface (HCC84, connected front with contours) and an
@@ -144,7 +178,7 @@ but not sufficient.
 
 ---
 
-## Figure 5 | Responder interfaces are locally constrained, not globally periodic
+## Figure 6 | Responder interfaces are locally constrained, not globally periodic
 
 **A** Local k-NN prediction schematic. Colour-graded spot nodes around a
 central node (i, black), with arrows showing neighbourhood prediction.
@@ -178,58 +212,64 @@ All 6 responder sections positive; 2 of 9 NR sections negative
 
 ---
 
-## Figure 6 | External CABO/NIVO replication confirms immune–immune algebra
+## Figure 7 | External CABO/NIVO replication confirms immune–immune algebra
 
 **A** Discovery → CABO/NIVO concordance table. Color-coded rows: orange
 (directional replication), green (replicated), teal (new finding).
-Symbols: → (directional), ✓ (replicated), ✓✓ (full replication), ✦ (new).
+Metrics: coexact fraction (directional), spatial score (directional),
+TM backbone (confirmed), IE commutator (p = 0.029, replicated),
+operator entropy (p = 0.029, replicated), KTS S3 enrichment (replicated),
+organised NR/HCC5NR (new finding).
 
 **B** CABO/NIVO Hodge metrics. Swarm plots for coexact fraction, spatial
 score, and LCC. Responders (red) left, non-responders (blue) right.
-Differences are directional but below significance at n = 4R/3NR.
+Subtitle: "Directional replication (n=4R / 3NR)." Differences are
+directional but below significance at this sample size.
 
-**C** NCG replication (p = 0.029). Swarm plots for IE fraction (purple) and
-operator entropy (red). Minimum achievable p for n = 4 vs 3 (every responder
-value exceeds every non-responder value for both metrics).
+**C** NCG replication (p = 0.029). Swarm plots for IE fraction and
+operator entropy. Minimum achievable p for n = 4 vs 3 (every responder
+value exceeds every non-responder value for both metrics). p = 0.029 each.
 
 **D** External KTS state distribution. Stacked bars for responders (n=4) and
-non-responders (n=3). Responders: 3 in S3, 1 in S1. Non-responders: 2 in S1,
-1 in S4 (HCC5NR).
+non-responders (n=3). Responders: 3 in S3, 1 in S2, 1 in S4. Non-responders:
+majority in S1, with HCC5NR occupying S4.
 
 **E** HCC5NR in local vs global R² space. Local vs global R² scatter for
 CABO/NIVO samples; HCC5NR marked as diamond (larger point, black edge).
 HCC5NR sits in the globally coherent zone (both R² positive and nearly equal).
 Responders cluster in the locally constrained zone (negative global R²).
 
-**F** Necessary conditions for response regime. Four stacked boxes
-representing the required conditions: spatial organisation (orange —
-necessary but not sufficient), immune–immune algebra (red — required),
-locally constrained front geometry (red — required), and S3/S4 KTS state
-(blue — associated). HCC5NR satisfies only the first.
+**F** Necessary conditions for response regime. Four stacked boxes:
+(1) spatial organisation (orange — necessary, not sufficient);
+(2) immune–immune algebra (red — required for response);
+(3) finite-range constraint (red — required for response);
+(4) S3/S4 KTS state (blue — associated with response).
+HCC5NR satisfies condition 1 only.
 
 ---
 
-## Figure 7 | IMC cross-modality stress test: operator regime is emergent at mesoscopic scale
+## Figure 8 | IMC cross-modality stress test: operator regime is emergent at mesoscopic scale
 
 **A** IMC single-cell resolution. Schematic of HCC ROI at true cellular
 resolution: red circles = tumour cells (left), blue circles = immune cells
 (right), separated by a central boundary. Caption: "No coherent coexact fronts
-at cell scale."
+at cell scale." Illustrates the sub-mesoscopic regime where single-cell spacing
+prevents coherent front formation.
 
 **B** Pseudospot coarse-graining pipeline. 4×4 grid of pseudospot bins
 (~80 px). Bins coloured by programme content: red (tumour-enriched), blue
 (immune-enriched), gold (interface: tumour bin adjacent to immune bin, ⊕
 symbol). Caption: "⊕ = interface bin (tumour adj. immune)."
 
-**C** LCC emergence across scales (phase-transition style). Line plot of LCC
-fraction vs pseudospot size (40–240 px) for responders (red circles) and
-non-responders (blue squares). Yellow shaded band = emergence window (72–108 px).
-Responder LCC crosses above non-responder LCC at ~80 px, then both converge
-as the interface collapses above 120 px.
+**C** LCC emergence across scales. Line plot of LCC fraction vs pseudospot
+size (40–240 px) for responders (red circles) and non-responders (blue squares).
+Yellow shaded band = emergence window (72–108 px). Responder LCC crosses above
+non-responder LCC at ~80 px (~55 µm, consistent with Visium spot size),
+then both converge as the interface over-coarse-grains above 120 px.
 
 **D** Response-signal peak at emergence window. Bar chart of |LCC_R − LCC_NR|
 by scale. Yellow bars (65–110 px) highlight the emergence window with peak
-effect size at ~80 px. Grey bars outside the window show lower or zero effect.
+effect size at ~80 px. Grey bars outside the window show lower effect.
 
 **E** Interface collapse at macro scale. Number of valid ROIs (≥20 interface
 bins) vs pseudospot size. Three shaded regions: sub-mesoscopic (pale orange),
@@ -237,7 +277,31 @@ emergence window (yellow), over-coarse-graining (pale blue). ROI count peaks
 at 80 px (n=62) and falls to ~3 at 240 px.
 
 **F** Three-scale emergence hierarchy. Schematic with three tiers connected
-by downward arrows: (1) ~10 µm / Single cells (yellow-gold box) — "Discrete
-puncta / No coherent fronts"; (2) 55–70 µm / Mesoscopic (cream box) —
-"Coherent operator fronts / Response signal"; (3) >200 µm / Macroscopic
-(pale blue box) — "Interface disappears / Over-homogenised."
+by downward arrows:
+(1) ~10 µm / Single cells (yellow-gold box) — "Discrete puncta / No coherent fronts";
+(2) 55–70 µm / Mesoscopic window (cream box) — "Coherent operator fronts /
+Response signal emerges";
+(3) >200 µm / Macroscopic (pale blue box) — "Interface disappears /
+Over-averaging." Indicates the spatial scale at which the operator-regime
+signal is detectable.
+
+---
+
+## Supplementary Figure S1 | Pan-cancer coexact interface enrichment (Spatial Hallmarks)
+
+**A** Per-section interface/tumour-core coexact density ratio for all
+26 Visium sections coloured by cancer type (breast, colorectal, glioblastoma,
+lung, ovarian, prostate). Every section exceeds ratio = 1.0 (horizontal dashed
+line). Sign test p = 1.49×10⁻⁸. Each point is one section; horizontal bars
+indicate group medians.
+
+**B** Median enrichment ratio per cancer type. All six cancer types
+individually replicated the interface enrichment: breast 4/4, colorectal 4/4,
+glioblastoma 4/4, lung 7/7, ovarian 2/2, prostate 5/5.
+
+**C** Distribution of coexact fractions across all 26 sections (interface
+subgraphs). Median coexact fraction = 0.253 (red line), substantially exceeding
+the pre-registration threshold of 0.10 (dashed line). This result establishes
+generalisability of the operator framework across tumour types; immunotherapy
+response was not annotated in this cohort. No multiple-comparison correction
+applied; result is exploratory.

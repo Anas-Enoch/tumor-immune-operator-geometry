@@ -32,14 +32,13 @@ External validation adds:
 | IMC scale sweep | `build_imc_*` | Zenodo 10.5281/zenodo.7624874 |
 | **Spatial Hallmarks** | `build_spatial_hallmarks_*` | Pan-cancer Visium (26 sections, 6 cancer types) |
 
-This repository also includes a pan-cancer Visium validation cohort (Spatial Hallmarks, 26 sections, 118,526 spots, six cancer types) and exploratory operator-geometry extensions used
-to refine interpretation of the HCC discovery cohort: interaction-mode
-decomposition, harmonic interface analysis, local-to-global relational
-consistency, and Lie-inspired interaction-sector geometry.
-These analyses support the interpretation that responding interfaces are not
-merely more immune-infiltrated, but are organised as locally heterogeneous,
-finite-range immune-interaction fronts with reduced tumour–myeloid algebraic
-collapse.
+A dedicated baseline benchmarking analysis (`build_baseline_benchmarking.py`)
+compares the operator-derived coexact metrics against six simpler abundance
+and proximity baselines (immune fraction, T-cell/tumour ratio, CD8 density,
+nearest-neighbour overlap, Moran's I, Ripley's K LCC proxy), demonstrating
+that coexact metrics outperform all baselines while retaining
+abundance-independent information (partial Spearman ρ = 0.535, p = 0.040
+after controlling for immune fraction).
 
 ---
 
@@ -49,7 +48,7 @@ collapse.
 operator-regime-hcc/
 │
 ├── README.md                       ← This file
-├── README_FIGURE_CAPTIONS.md       ← Full figure legends for all 7 main figures
+├── README_FIGURE_CAPTIONS.md       ← Full figure legends for all 8 main figures
 ├── requirements.txt                ← Python package dependencies (pip)
 ├── environment.yml                 ← Conda environment specification
 ├── data_availability.md            ← Dataset access and accession numbers
@@ -65,6 +64,7 @@ operator-regime-hcc/
 │   │   ├── build_ncg_commutators.py
 │   │   ├── build_kts_transitions.py
 │   │   ├── build_constraint_range.py
+│   │   ├── build_baseline_benchmarking.py  ← NEW: AUC/ROC vs simpler baselines
 │   │   ├── build_ks_instability.py
 │   │   ├── build_interface_transport.py
 │   │   ├── build_interaction_mode_decomposition.py  ← exploratory
@@ -91,7 +91,7 @@ operator-regime-hcc/
 │   │   ├── analyze_scale_transition.py
 │   │   └── run_imc_scale_sweep.sh
 │   │
-│   ├── spatial_hallmarks/           ← Pan-cancer Visium validation
+│   ├── spatial_hallmarks/          ← Pan-cancer Visium validation
 │   │   ├── build_spatial_hallmarks_program_scores.py
 │   │   ├── build_spatial_hallmarks_interface_mask.py
 │   │   ├── build_spatial_hallmarks_hodge_interface.py
@@ -103,7 +103,7 @@ operator-regime-hcc/
 │   │
 │   └── figures/                    ← Figure generation
 │       ├── fig_globals.py          ← Shared style constants, helpers
-│       ├── build_figures.py        ← Figures 1–7 (main manuscript)
+│       ├── build_figures.py        ← Figures 1–8 (main manuscript)
 │       └── build_supplement_figs.py
 │
 ├── results/                        ← Analysis output CSVs
@@ -115,6 +115,7 @@ operator-regime-hcc/
 │   │   ├── results_hcc_kts_states.csv
 │   │   ├── results_hcc_kts_transitions.csv
 │   │   ├── results_hcc_constraint_range.csv
+│   │   ├── results_hcc_baseline_benchmarking.csv  ← NEW: AUC vs baselines
 │   │   ├── results_hcc_interaction_mode_summary.csv    ← exploratory
 │   │   ├── results_hcc_harmonic_biological_manifold.csv ← exploratory
 │   │   ├── results_hcc_category_local_global.csv        ← exploratory
@@ -134,18 +135,20 @@ operator-regime-hcc/
 │       ├── cabonivo_kts_states.csv
 │       └── cabonivo_step23_local_global.csv
 │
-├── figures/                        ← Publication figures (300 dpi PNG)
-│   ├── fig1_conceptual.png
-│   ├── fig2_hodge_geometry.png
-│   ├── fig3_ncg_algebra.png
-│   ├── fig4_kts_transitions.png
-│   ├── fig5_finite_range.png
-│   ├── fig6_external_validation.png
-│   └── fig7_imc_scale.png
+├── figures/                        ← Publication figures (200 dpi PNG)
+│   ├── fig1_hcc_baseline_benchmarking.png  ← NEW: AUC/ROC comparison
+│   ├── fig2_conceptual.png
+│   ├── fig3_hodge_geometry.png
+│   ├── fig4_ncg_algebra.png
+│   ├── fig5_kts_transitions.png
+│   ├── fig6_finite_range.png
+│   ├── fig7_external_validation.png
+│   ├── fig8_imc_scale.png
+│   └── figS1_spatial_hallmarks.png         ← Supplementary Figure S1
 │
-└── supplementary/                   ← Supplementary analyses and figures
-    |--exploratory_extensions/                  
-    |--figures/
+└── supplementary/
+    ├── exploratory_extensions/
+    ├── figures/
     ├── supp_spectral_entropy.py
     ├── supp_robustness_k_sweep.py
     ├── supp_interface_threshold.py
@@ -155,16 +158,18 @@ operator-regime-hcc/
 
 ---
 
+## Analysis Pipeline
 
 ```
-Hodge coexact organisation
+Baseline benchmarking (simpler metrics)
+→ Hodge coexact organisation
 → immune–immune commutator algebra
 → KTS regime structure
 → finite-range local/global analysis
 → external CABO/NIVO replication
 → IMC scale-emergence stress test
+→ pan-cancer Spatial Hallmarks validation
 ```
-
 
 ---
 
@@ -224,33 +229,36 @@ python build_constraint_range.py \
     --h5ad-dir data/hepatocellular_carcinoma
 ```
 
-### 4  Run external CABO/NIVO replication
+### 4  Run baseline benchmarking (NEW)
 
 ```bash
-cd scripts/cabo_nivo
-python build_cabonivo_h5ad.py
-python build_cabonivo_program_scores.py
-python build_cabonivo_interface.py
-python build_cabonivo_hodge_hotspots.py
-python build_cabonivo_ncg_commutators.py
-python build_cabonivo_kts_states.py
-python build_cabonivo_step23.py
+python build_baseline_benchmarking.py \
+    --adata   data/hepatocellular_carcinoma/hcc_scored.h5ad \
+    --results results/hcc/results_hcc_hodge_interface_summary.csv \
+    --kts     results/hcc/results_hcc_kts_states.csv \
+    --out     results/hcc/results_hcc_baseline_benchmarking.csv \
+    --fig     figures/fig1_hcc_baseline_benchmarking.png
 ```
 
-### 5  Run IMC scale sweep
+### 5  Run external validation
 
 ```bash
-cd scripts/imc
-python extract_imc_cell_table.py
-python build_imc_programs.py
-bash run_imc_scale_sweep.sh      # sweeps 40–240 px
+# CABO/NIVO
+cd scripts/cabo_nivo && bash run_cabonivo_pipeline.sh
+
+# IMC scale sweep
+cd scripts/imc && bash run_imc_scale_sweep.sh   # sweeps 40–240 px
+
+# Spatial Hallmarks pan-cancer
+cd scripts/spatial_hallmarks && bash run_spatial_hallmarks.sh
 ```
 
 ### 6  Generate all figures
 
 ```bash
 cd scripts/figures
-python build_figures.py          # saves fig1–7 to figures/
+python build_figures.py          # saves fig1–8 to figures/
+python build_supplement_figs.py  # saves figS1 to figures/
 ```
 
 ---
@@ -296,6 +304,11 @@ connecting the commutator algebra directly to the Hodge decomposition.
 | S3 | P95 ≥ 50, score ≥ 0.08 | Amplified high-intensity front |
 | S4 | Gini ≥ 0.60, P95 < 20 | Residual concentrated |
 
+> **Threshold calibration note:** state boundaries were defined empirically
+> on the discovery cohort and have not been pre-registered or externally
+> validated. They require recalibration before application to independent
+> datasets.
+
 ### Finite-range analysis
 
 - **Local R²**: leave-one-out k-NN mean prediction of coexact density
@@ -307,18 +320,45 @@ connecting the commutator algebra directly to the Hodge decomposition.
 
 ## Key Results Summary
 
+> **Statistical note:** all discovery-cohort statistics are exploratory
+> (n = 15 sections, 6R/9NR). No correction for multiple comparisons was
+> applied. At Bonferroni threshold α/11 = 0.0045, NCG purity (p = 0.0016)
+> clearly survives correction; IE and EM commutator statistics lie near
+> the threshold and should be treated as strong exploratory signals.
+> The Spatial Hallmarks pan-cancer result is robust under any correction.
+
+### Baseline benchmarking (Figure 1)
+
+| Metric | AUC | p (two-sided) | Type |
+|---|---|---|---|
+| Interface coexact energy | **0.926** | **0.005** | Operator |
+| Coexact fraction | **0.907** | **0.008** | Operator |
+| Immune fraction | 0.889 | 0.012 | Abundance |
+| T-cell/tumour ratio | 0.870 | 0.018 | Abundance |
+| CD8 density proxy | 0.852 | 0.026 | Abundance |
+| Moran's I (immune) | 0.796 | 0.066 | Spatial |
+| LCC (Ripley's K proxy) | 0.759 | 0.114 | Spatial |
+| NN overlap (proximity) | 0.500 | 1.000 | Proximity |
+
+Coexact fraction retains significant association after controlling for immune
+fraction (partial Spearman ρ = 0.535, p = 0.040), demonstrating
+abundance-independent predictive information.
+
+### Primary operator-regime findings
+
 | Finding | Statistic | n |
 |---|---|---|
 | Spatial score R > NR (discovery) | p = 0.006 | 6R vs 9NR sections |
 | IE commutator R > NR | p = 0.0048, fold 7.1× | 6R vs 9NR |
 | EM commutator R > NR | p = 0.0048, fold 3.9× | 6R vs 9NR |
+| IM commutator R > NR | p = 0.012, fold 3.1× | 6R vs 9NR |
+| Operator entropy R > NR | p = 0.050 | 6R vs 9NR |
 | KTS S1 convergence NR | Fisher p = 0.015 | 11 patients |
 | Local R² R > NR | p = 0.033 | 6R vs 9NR |
 | IE fraction replicated (CABO/NIVO) | p = 0.029 | 4R vs 3NR |
 | Operator entropy replicated | p = 0.029 | 4R vs 3NR |
 | IMC emergence window | ~80px / 55µm | 42 patients, 86 ROIs |
 | **Pan-cancer coexact enrichment** | **26/26, p = 1.49×10⁻⁸** | **26 sections, 6 cancer types** |
-| Pan-cancer KS-like instability | 26/26, p = 1.49×10⁻⁸ | Kruskal p = 0.0077 across types |\n| Pan-cancer immune-sector dominance | 26/26, median fraction 0.513 | Context-dependent (no TM collapse) |
 
 ---
 
@@ -348,105 +388,67 @@ For prospective validation in an independent pre-therapy Visium cohort:
 3. H1 topological loop max persistence ≤ 25
 
 All three are computable from a single pre-therapy section and are size-agnostic.
+These thresholds were defined on the discovery cohort and require external
+calibration before any clinical application.
 
 ---
 
-## Additional exploratory operator-geometry analyses
+## Exploratory Operator-Geometry Analyses
 
 In addition to the primary Hodge, NCG, KTS, external validation, and IMC
-analyses, this repository contains a small set of exploratory operator-geometry
-extensions.
+analyses, this repository contains exploratory operator-geometry extensions.
 These analyses support interpretation and robustness; they do not replace the
 primary manuscript results.
 
 ### Interaction-mode decomposition
 
-**Script:**
-```bash
-python3 scripts/hcc/build_interaction_mode_decomposition.py
-```
+**Script:** `scripts/hcc/build_interaction_mode_decomposition.py`  
 **Output:** `results/hcc/results_hcc_interaction_mode_summary.csv`
 
-Decomposes the six pairwise commutator channels (TI, TE, TM, IE, IM, EM)
+Decomposes six pairwise commutator channels (TI, TE, TM, IE, IM, EM)
 into interpretable interaction sectors, distinguishing the tumour–myeloid
 backbone from the immune–immune interaction sector.
-Provides a compact representation of the NCG layer and supports the
-interpretation that responder interfaces show expansion of immune-interaction
-algebra, while non-responder interfaces concentrate around the TM backbone.
-
----
 
 ### Harmonic biological manifold analysis
 
-**Script:**
-```bash
-python3 scripts/hcc/build_harmonic_biological_manifold.py
-```
+**Script:** `scripts/hcc/build_harmonic_biological_manifold.py`  
 **Output:** `results/hcc/results_hcc_harmonic_biological_manifold.csv`
 
-Performs a cautious harmonic decomposition of coexact-density profiles around
-the interface centroid.
-**Not** a literal group-FFT or Fourier analysis of biological signals.
-Low harmonics = globally smooth or ring-like organisation;
-mid harmonics = finite-range mesoscopic organisation;
-high harmonics = punctate or noisy fragmentation.
-In the HCC discovery cohort, responder interfaces showed enrichment of
-intermediate harmonic modes, supporting the finite-range mesoscopic
-organisation interpretation.
-
----
+Cautious harmonic decomposition of coexact-density profiles around the
+interface centroid. **Not** a literal Fourier analysis of biological signals.
+Low harmonics = globally smooth organisation; mid = finite-range mesoscopic;
+high = punctate fragmentation.
 
 ### Local-to-global relational consistency
 
-**Script:**
-```bash
-python3 scripts/hcc/build_category_local_global.py
-```
+**Script:** `scripts/hcc/build_category_local_global.py`  
 **Output:** `results/hcc/results_hcc_category_local_global.csv`
 
 Tests whether local neighbourhood operator signatures compress into a
-homogeneous global interface profile.
-Inspired by local-to-global reasoning; **not** a literal sheaf-theoretic or
-category-theoretic construction.
-Responder interfaces show lower local-to-global consistency and higher
-neighbourhood signature variance, consistent with locally heterogeneous
-finite-range interaction fronts rather than globally uniform fields.
-
----
+homogeneous global interface profile. Responder interfaces show lower
+local-to-global consistency and higher neighbourhood signature variance,
+consistent with locally heterogeneous finite-range interaction fronts.
 
 ### Lie-inspired interaction-sector geometry
 
-**Script:**
-```bash
-python3 scripts/hcc/build_lie_interaction_geometry.py
-```
+**Script:** `scripts/hcc/build_lie_interaction_geometry.py`  
 **Output:** `results/hcc/results_hcc_lie_interaction_geometry_summary.csv`
 
-Reformulates the commutator layer into interaction sectors: a
-tumour–myeloid backbone and an immune sector (IE + IM + EM).
+Reformulates the commutator layer into interaction sectors: a tumour–myeloid
+backbone and an immune sector (IE + IM + EM).
 
 > **Important:** interpret as Lie-inspired sector geometry, **not** as
-> evidence that the biological system forms a true Lie algebra.
-
-Genuinely new contribution: the tumour–myeloid dominance metric, which
-was significantly higher in non-responders ($p = 0.025$), supporting the
-interpretation of algebraic collapse toward the TM backbone.
-The Jacobi-inspired inconsistency proxy was **not** significant ($p = 0.69$),
-which appropriately limits the claim to sector-level interaction geometry
-rather than formal Lie-algebraic closure.
-
----
-
-### Interpretation hierarchy
+> evidence that the biological system forms a true Lie algebra. The
+> Jacobi-inspired inconsistency proxy was not significant (p = 0.69),
+> appropriately limiting the claim to sector-level interaction strength
+> rather than formal Lie-algebraic closure (see Supplementary Note S1).
 
 | Analysis | Status |
 |---|---|
 | Interaction-mode decomposition | Useful interpretive extension of NCG |
-| Harmonic biological manifold | Exploratory support for mesoscopic finite-range organisation |
-| Local-to-global consistency | Useful support for local heterogeneity / non-global compressibility |
-| Lie-inspired sector geometry | Interpretive framing with one new TM-dominance diagnostic |
-
-These analyses are additive to, and do not replace, the primary evidence chain:
+| Harmonic biological manifold | Exploratory support for finite-range organisation |
+| Local-to-global consistency | Support for local heterogeneity |
+| Lie-inspired sector geometry | Interpretive framing; TM-dominance diagnostic significant |
 
 ---
 
@@ -462,7 +464,3 @@ These analyses are additive to, and do not replace, the primary evidence chain:
   year    = {2025}
 }
 ```
-
----
-
-
